@@ -63,7 +63,7 @@ function App() {
     const getLivePrediction = async () => {
       try {
         // Voláme backend s parametrom only_score=true, aby sme nezaťažovali Gemini
-        const response = await axios.post('http://127.0.0.1:8000/predict?only_score=true', inputs);
+        const response = await axios.post('https://insaytia-app.onrender.com', inputs);
         if (response.data && response.data.score !== undefined) {
           setLiveScore(response.data.score);
         }
@@ -86,7 +86,7 @@ function App() {
   const handlePredict = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:8000/predict', inputs);
+      const response = await axios.post('https://insaytia-app.onrender.com', inputs);
       setResult(response.data);
     } catch (error) {
       console.error("Chyba:", error);
@@ -100,7 +100,7 @@ function App() {
     <div style={{ backgroundColor: '#f5f7fa', minHeight: '100vh', padding: '20px', fontFamily: 'sans-serif' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
        
-        <h1 style={{ textAlign: 'center', color: '#1a365d' }}>Insaytia Vitality Check</h1>
+        <h1 style={{ textAlign: 'center', color: '#1a365d' }}>Insaytia | Energia Check</h1>
 
 
         {/* --- SEKCIA 1: LIVE VIZUALIZÁCIA --- */}
@@ -112,8 +112,8 @@ function App() {
           <div style={{ position: 'relative', height: '40px', backgroundColor: '#edf2f7', borderRadius: '8px', overflow: 'hidden' }}>
             <div style={{
               height: '100%',
-              width: `${(liveScore / 7) * 100}%`, // OPRAVENÉ: currentLiveScore -> liveScore
-              backgroundColor: getBarColor(liveScore), // OPRAVENÉ: currentLiveScore -> liveScore
+              width: `${(liveScore / 7) * 100}%`, 
+              backgroundColor: getBarColor(liveScore), 
               transition: 'width 0.3s ease-out, background-color 0.3s'
             }} />
             {[1,2,3,4,5,6,7].map(num => (
