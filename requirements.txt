@@ -1,0 +1,10 @@
+fastapi
+python-dotenv
+uvicorn
+pandas
+scikit-learn
+joblib
+google-generativeai
+pydantic
+pydantic-settings
+python-multipart
