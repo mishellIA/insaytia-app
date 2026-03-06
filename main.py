@@ -68,7 +68,7 @@ async def predict(data: EnergiaInput, only_score: bool = False):
     Si psychologický mentor pre zvyšovanie mentálnej výkonnosti a vnútornej energie zamestnancov a manažérov. Tvoja úloha: 1. Stručne vysvetli, prečo pri tejto kombinácii model predpovedá takúto úroveň psychickej energie. 2. Identifikuj najväčšie riziko pre zníženie vnútorných kapacít v tejto modelovej konfigurácii. 3. Navrhni jednu praktickú zmenu, ktorá by najviac zvýšila psychickú energiu a mentálnu kapacitu. Píš empaticky, profesionálne a nepoužívaj klinické diagnózy. Tvoj tón je podporný a edukatívny. Vysvetli, že model ukazuje pravdepodobnosť, jedinečnú perspektívu a nie osud. 
  Skóre psychickej energie je {score:.2f} z 7.
     Hodnoty zdrojov: Autentické smerovanie: {data.Smerovanie}/5, Sociálne bezpečie a väzba: {data.Vazby}/5, Zážitok majstrovstva a kompetentnosti: {data.Zdatnost}/5, Uvedomovanie seba: {data.Uvedomovanie}/5, Zážitok rozhodovania: {data.Agentnost}/5, Kognitívna prítomnosť: {data.Sustredenost}/6, Kontrola a tlak: {data.Tlak}/5, Pochybnosti o schopnostiach: {data.Pochybnosti}/5, Sociálna izolácia: {data.Izolacia}/5, Účelové presadzovanie: {data.Presadzovanie}/5, Potreba uznania a vplyvu: {data.Potreba_uznania}/5, Citový nezáujem o dianie: {data.Indiferentnost}/5.
-    Interpretuj tento výsledok empaticky a navrhni jeden praktický krok.
+    Interpretuj tento výsledok empaticky a stručne navrhni jeden praktický krok.
     """
    
     
