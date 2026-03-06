@@ -63,7 +63,7 @@ function App() {
     const getLivePrediction = async () => {
       try {
         // Voláme backend s parametrom only_score=true, aby sme nezaťažovali Gemini
-        const response = await axios.post('https://insaytia-app.onrender.com', inputs);
+        const response = await axios.post('https://insaytia-app.onrender.com/predict?only_score=true', inputs);
         if (response.data && response.data.score !== undefined) {
           setLiveScore(response.data.score);
         }
@@ -86,7 +86,7 @@ function App() {
   const handlePredict = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('https://insaytia-app.onrender.com', inputs);
+      const response = await axios.post('https://insaytia-app.onrender.com/predict', inputs);
       setResult(response.data);
     } catch (error) {
       console.error("Chyba:", error);

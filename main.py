@@ -18,10 +18,14 @@ genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 gemini = genai.GenerativeModel('gemini-2.5-flash')
 
 
-# Povolenie CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=[
+        "http://localhost:5173",        # Tvoj lokálny React (Vite)
+        "http://127.0.0.1:5173",       # Alternatívna adresa localhostu
+        "https://tvoj-projekt.web.app", # TVOJA FIREBASE ADRESA (po nasadení)
+        "https://tvoj-projekt.firebaseapp.com"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
