@@ -56,13 +56,13 @@ function App() {
   const [liveScore, setLiveScore] = useState(3.5);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showCookies, setShowCookies] = useState(!localStorage.getItem('cookiesAccepted'));
 
-
-  // 2. Live Sync s Backendom (Presný model)
+  
   useEffect(() => {
     const getLivePrediction = async () => {
       try {
-        // Voláme backend s parametrom only_score=true, aby sme nezaťažovali Gemini
+        
         const response = await axios.post('https://insaytia-app.onrender.com/predict?only_score=true', inputs);
         if (response.data && response.data.score !== undefined) {
           setLiveScore(response.data.score);
@@ -129,6 +129,20 @@ function App() {
           </div>
         </div>
 
+      {/* Legenda pod barom */}
+    <div style={{ 
+      marginTop: '15px', 
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(4, 1fr)', 
+      gap: '10px',
+      fontSize: '11px',
+      textAlign: 'center'
+    }}>
+      <div style={{ color: '#FA8072' }}>🔴 &lt; 3.0<br/>Znížená - čas na reštart.</div>
+      <div style={{ color: '#eab308' }}>🟡 3.0 - 4.0<br/>Mierna - priestor pre obnovenie energie.</div>
+      <div style={{ color: '#84cc16' }}>🟢 4.0 - 5.0<br/>Stredná - vyrovnaná úroveň energie a živosti.</div>
+      <div style={{ color: '#059669' }}>🌟 &gt; 5.0<br/>Vysoká - prosperuje s vysokou kapacitou.</div>
+    </div>
 
         {/* --- SEKCIA 2: SLIDERY --- */}
         <div style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
@@ -196,7 +210,57 @@ function App() {
           </div>
         )}
       </div>
+
+      <footer style={{ 
+        marginTop: '50px', 
+        padding: '20px', 
+        fontSize: '0.8rem', 
+        color: '#666', 
+        textAlign: 'center',
+        borderTop: '1px solid #eee' 
+      }}>
+        <p>© 2026 Insaytia App. Všetky práva vyhradené.</p>
+        <p><strong>Upozornenie:</strong> Výsledky vychádzajú z prediktívneho ML modelu a podľa potreby sú následne interpretované umelou inteligenciou. Tieto slovné interpretácie majú informatívny charakter.</p>
+      </footer>
+
+      {showCookies && (
+        <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: '#f8f9fa',
+          padding: '20px',
+          boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
+          zIndex: 1000,
+          textAlign: 'center',
+          fontSize: '0.9rem'
+        }}>
+          <p>
+            Tento web používa nevyhnutné súbory cookies na zabezpečenie funkčnosti a AI analýzy. 
+            Používaním webu súhlasíte s ich spracovaním.
+          </p>
+          <button 
+            onClick={() => {
+              localStorage.setItem('cookiesAccepted', 'true');
+              setShowCookies(false);
+            }}
+            style={{
+              backgroundColor: '#007bff',
+              color: 'white',
+              border: 'none',
+              padding: '8px 20px',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            Súhlasím
+          </button>
+        </div>
+      )}
+
     </div>
+    
   );
 }
 

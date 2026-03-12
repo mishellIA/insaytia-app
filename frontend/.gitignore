@@ -30,3 +30,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 .env
+
+# Moje dáta a modely
+data_new.csv
+model_new.pkl
+*.pkl
+*.csv
