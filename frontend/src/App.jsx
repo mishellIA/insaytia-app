@@ -21,18 +21,18 @@ const getBarColor = (score) => {
 
 
 const labels = {
-  Uvedomovanie: "Sebavnímanie",
-    Agentnost: "Agentnosť",
-    Sustredenost: "Kognitívna sústredenosť",
-    Smerovanie: "Autentické smerovanie",
+  Uvedomovanie: "Sebavnímanie a identita",
+    Agentnost: "Agentické rozhodovanie",
+    Sustredenost: "Pracovná sústredenosť",
+    Smerovanie: "Sebariadenie",
     Tlak: "Tlak a kontrola",
     Vazby: "Sociálne väzby",
     Zdatnost: "Zdatnosť",
     Pochybnosti: "Pochybnosti",
     Izolacia: "Sociálna izolácia",
-    Presadzovanie: "Účelové presadzovanie",
+    Presadzovanie: "Strategický pragmatizmus",
     Potreba_uznania: "Potreba uznania",
-    Indiferentnost: "Indiferentnosť"
+    Indiferentnost: "Operatívna nekompromisnosť"
 };
 
 
@@ -52,18 +52,28 @@ function App() {
     Indiferentnost: 2
   });
 
-
+  const [token, setToken] = useState('');
   const [liveScore, setLiveScore] = useState(3.5);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showCookies, setShowCookies] = useState(!localStorage.getItem('cookiesAccepted'));
 
+  const copyToClipboard = () => {
+  if (result && result.interpretation) {
+    navigator.clipboard.writeText(result.interpretation);
+    alert("Interpretácia bola skopírovaná do schránky!");
+  }
+};
   
   useEffect(() => {
     const getLivePrediction = async () => {
       try {
-        
-        const response = await axios.post('https://insaytia-app.onrender.com/predict?only_score=true', inputs);
+        const payload = { 
+      ...inputs, 
+      token: token
+      };
+      
+        const response = await axios.post('https://insaytia-app.onrender.com/predict?only_score=true', payload);
         if (response.data && response.data.score !== undefined) {
           setLiveScore(response.data.score);
         }
@@ -86,11 +96,16 @@ function App() {
   const handlePredict = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('https://insaytia-app.onrender.com/predict', inputs);
+      const payload = { 
+        ...inputs, 
+        token: token 
+      };
+
+      const response = await axios.post('https://insaytia-app.onrender.com/predict', payload);
       setResult(response.data);
     } catch (error) {
       console.error("Chyba:", error);
-      alert("Backend nebeží! Skontroluj uvicorn.");
+      alert("Backend nebeží! Skontrolujte kód alebo pripojenie.");
     }
     setLoading(false);
   };
@@ -100,7 +115,7 @@ function App() {
     <div style={{ backgroundColor: '#f5f7fa', minHeight: '100vh', padding: '20px', fontFamily: 'sans-serif' }}>
       <div style={{ maxWidth: '700px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
        
-        <h1 style={{ textAlign: 'center', color: '#1a365d' }}>Insaytia | Energia Check</h1>
+        <h1 style={{ textAlign: 'center', color: '#1a365d' }}>Insaytia | Agentická Vitalita</h1>
 
 
         {/* --- SEKCIA 1: LIVE VIZUALIZÁCIA --- */}
@@ -182,8 +197,9 @@ function App() {
         </div>
 
 
-        {/* --- SEKCIA 3: AI VÝSLEDOK --- */}
+        
         {result && (
+          <> {/* <--- AI */}
           <div style={{
             backgroundColor: '#fff', padding: '30px', borderRadius: '20px',
             borderLeft: `10px solid ${getScoreDetails(result.score).color}`,
@@ -201,15 +217,49 @@ function App() {
            
             <div style={{ backgroundColor: '#f8fafc', padding: '20px', borderRadius: '12px' }}>
               <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0 }}>
-                <Brain size={20} color="#1a365d" /> Expertný vhľad mentora
+                <Brain size={20} color="#1a365d" /> Interpretácia modelovej konfigurácie
               </h4>
               <p style={{ lineHeight: '1.7', color: '#2d3748', whiteSpace: 'pre-wrap' }}>
                 {result.interpretation}
               </p>
+
+              <button 
+                onClick={copyToClipboard}
+                style={{
+                  marginTop: '10px',
+                  backgroundColor: '#4CAF50',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 15px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+               📋 Kopírovať interpretáciu
+              </button>
             </div>
           </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+    
+            </label>
+            <input
+              type="password"
+              placeholder="Zadajte kód z workshopu..."
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              style={{
+                padding: '10px',
+                width: '100%',
+                borderRadius: '5px',
+                border: '1px solid #ccc'
+              }}
+            />
+           </div>
+         </> 
         )}
-      </div>
+    </div>
 
       <footer style={{ 
         marginTop: '50px', 
@@ -257,7 +307,7 @@ function App() {
             Súhlasím
           </button>
         </div>
-      )}
+)}
 
     </div>
     

@@ -9,9 +9,7 @@ from dotenv import load_dotenv
 
 app = FastAPI()
 
-
 model = joblib.load("model_new2.pkl")
-
 
 
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
@@ -45,11 +43,14 @@ class EnergiaInput(BaseModel):
     Presadzovanie: float
     Potreba_uznania: float
     Indiferentnost: float
+    token: str
 
+
+VALID_TOKEN = os.getenv("APP_ACCESS_TOKEN", "default_emergency_password")
 
 @app.post("/predict")
 async def predict(data: EnergiaInput, only_score: bool = False):
-    # A. Príprava dát pre model
+    
     features = np.array([[
         data.Uvedomovanie, data.Agentnost, data.Sustredenost,
         data.Smerovanie, data.Tlak, data.Vazby,
@@ -62,10 +63,15 @@ async def predict(data: EnergiaInput, only_score: bool = False):
     score = model.predict(features)[0]
     if only_score:
        return {"score": score}
-   
+    
+    if data.token != VALID_TOKEN:
+        return {
+            "score": score,
+            "interpretation": "❌ Zadaný kód je neplatný alebo jeho platnosť vypršala. Pre odomknutie AI reflexie zadajte prístupový kód z workshopu."
+        }
     
     prompt = f"""
-    Si odborný konzultant v oblasti organizačnej psychológie a dátovej analytiky zameranej na rozvoj ľudského kapitálu. Vysvetli, že model ukazuje pravdepodobnosť, jedinečnú perspektívu a nie osud. 
+    Si odborný konzultant v oblasti organizačnej psychológie a dátovej analytiky zameranej na rozvoj ľudského kapitálu. V úvodnej vete sa predstav ako "AI facilitátor reflexie" a vysvetli, že model ukazuje pravdepodobnosť, jedinečnú perspektívu a nie osud. 
     Tvoja úloha: > Interpretuj výslednú konfiguráciu modelu, ktorá pri zadaných vstupoch predikuje úroveň agentickej vitality a činorodosti na hodnote {score:.2f} z 7.
     Štruktúra odpovede: 
     1. Stručne vysvetli, prečo pri tejto kombinácii model predpovedá takúto úroveň psychickej energie/agentickej vitality. Zameraj sa na kritické faktory.
