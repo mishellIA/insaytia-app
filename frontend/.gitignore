@@ -33,6 +33,5 @@ __pycache__/
 
 # Moje dáta a modely
 data_new.csv
-model_new.pkl
-*.pkl
+train_model.py
 *.csv

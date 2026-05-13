@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // PRIDANÉ: useEffect
+import { useState, useEffect } from 'react'; 
 import axios from 'axios';
 import { Activity, Brain, Send } from 'lucide-react';
 
@@ -72,7 +72,7 @@ function App() {
       ...inputs, 
       token: token
       };
-      
+
         const response = await axios.post('https://insaytia-app.onrender.com/predict?only_score=true', payload);
         if (response.data && response.data.score !== undefined) {
           setLiveScore(response.data.score);
